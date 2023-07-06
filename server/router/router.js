@@ -4,7 +4,7 @@ let router = express.Router()
 let path = require('path')
 
 router.post('/expense/create', createExpense)
-router.get('/expense/get')
+router.get('/expense/get', getExpenses)
 router.patch('/expense/edit/:id')
 router.delete('/expense/delete/:id')
 
@@ -13,6 +13,7 @@ module.exports = router
 async function createExpense(req, res) {
 
     try{
+        console.log(req.body)
         let {title, amount, date} = req.body
 
         let emptyFields = []
@@ -43,4 +44,14 @@ async function createExpense(req, res) {
         console.log(err)
     }
 
+}
+
+async function getExpenses (req, res){
+    try{
+        let data = await Expense.find();
+        res.status(200).json(data);
+    }
+    catch(err) {
+        console.log(err)
+    }
 }

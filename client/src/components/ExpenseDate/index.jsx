@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
+import './ExpenseDate.css'
 export default function ExpenseDate ({date}) {
-    const day = date.getDate()
-    const month = date.toLocaleDateString('US-en', {month: 'long'})
-    const year = date.getFullYear()
+    const d = new Date(date)
+    const day = d.getDate()
+    const month = d.toLocaleDateString('US-en', {month: 'long'})
+    const year = d.getFullYear()
     return(
         <div className='expense-date'>
             <div className='expense-date__month'>{month}</div>
