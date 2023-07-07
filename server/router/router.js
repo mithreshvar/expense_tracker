@@ -57,7 +57,7 @@ async function getExpenses (req, res){
 }
 
 
-const updateExpenses = async (req, res) => {
+async function updateExpenses (req, res) {
     const { id } = req.params;
 
     // validating id to prevent server crash
@@ -76,7 +76,7 @@ const updateExpenses = async (req, res) => {
 }
 
 
-const deleteExpenses = async (req, res) => {
+async function deleteExpenses (req, res) {
     const { id } = req.params;
 
     // validating id to prevent server crash
