@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useRef } from 'react';
 import './NewExpensesForm.css'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function NewExpenseForm ({addExpense}) {
 
     const titleRef = useRef()
@@ -15,29 +17,35 @@ export default function NewExpenseForm ({addExpense}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const data = {
-            "title": titleRef.current.value,
-            "amount": amountRef.current.value,
-            "date": dateRef.current.value
+        if ( !(titleRef.current.value.trim() && amountRef.current.value.trim() && dateRef.current.value.trim()) ) {
+            toast.error("Fields Cannot be empty!")
         }
-        
-        try{
-            let response = await fetch('http://localhost:3000/expense/create', {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { "Content-Type": "application/json"}
-            })
-            if (response.ok) {
-                handleCancel()
-                addExpense([data])
+        else {
+            const data = {
+                "title": titleRef.current.value,
+                "amount": amountRef.current.value,
+                "date": dateRef.current.value
             }
-        }
-        catch(err) {
-            console.log(err.message)
+            
+            try{
+                let response = await fetch('http://localhost:3000/expense/create', {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: { "Content-Type": "application/json"}
+                })
+                if (response.ok) {
+                    handleCancel()
+                    addExpense([data])
+                }
+            }
+            catch(err) {
+                console.log(err.message)
+            }
         }
     }
 
     return(
+        <>
         <div className='new-expense'>
             <form onSubmit={handleSubmit}>
                 <div className="new-expense__controls">
@@ -60,5 +68,18 @@ export default function NewExpenseForm ({addExpense}) {
                 </div>
             </form>
         </div>
+            <ToastContainer
+                position="top-left"
+                limit={1}
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                pauseOnHover
+                theme="dark"
+            />
+        </>
     )
 }

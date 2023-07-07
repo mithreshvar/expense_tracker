@@ -4,10 +4,13 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd ./server && nodemon server.js",
+    "start": " concurrently \"cd ./server && nodemon server.js\" \"cd ./client && npm start\"",
     "build": "cd ./client && npm run build"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
 }

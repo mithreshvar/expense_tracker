@@ -5,8 +5,8 @@ let path = require('path')
 
 router.post('/expense/create', createExpense)
 router.get('/expense/get', getExpenses)
-router.patch('/expense/edit/:id')
-router.delete('/expense/delete/:id')
+router.patch('/expense/edit/:id', updateExpenses)
+router.delete('/expense/delete/:id', deleteExpenses)
 
 module.exports = router
 
@@ -54,4 +54,40 @@ async function getExpenses (req, res){
     catch(err) {
         console.log(err)
     }
+}
+
+
+const updateExpenses = async (req, res) => {
+    const { id } = req.params;
+
+    // validating id to prevent server crash
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "No such Expense" })
+    }
+
+    const expense = await Expense.findOneAndUpdate({ _id: id }, {
+        ...req.body
+    });
+
+    if (!expense) {
+        return res.status(404).json({ error: "No such Expense" });
+    }
+    res.status(200).json(expense);
+}
+
+
+const deleteExpenses = async (req, res) => {
+    const { id } = req.params;
+
+    // validating id to prevent server crash
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "No such Expense" })
+    }
+
+    const expense = await Expense.findOneAndDelete({ _id: id });
+
+    if (!expense) {
+        return res.status(404).json({ error: "No such Expense" });
+    }
+    res.status(200).json(expense);
 }
